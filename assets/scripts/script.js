@@ -179,7 +179,7 @@ $(document).ready(function () { //DOM ready function
                             console.log('thisRecipeObject after iteration ' + i + ' = ' + JSON.stringify(thisRecipeObject));
                     }
                     //6. Pass these results to a function that can render the results onto the page.
-                    //renderRecipeResults(thisRecipeObject);
+                    renderRecipeResults(thisRecipeObject);
                 },
                 error: function(){
                     alert('There has been an error.');
@@ -187,6 +187,33 @@ $(document).ready(function () { //DOM ready function
             }); 
 
         });
+
+        function renderRecipeResults(thisRecipeObject){
+            let recipe = thisRecipeObject;
+            let modalContainer = $('<div>').attr('class', 'ui modal').appendTo('#mainContainer');
+            $('<div>').attr('class', 'header').text(recipe.recipeName).appendTo(modalContainer);
+            let recipeImgContainer = $('<div>').attr('class', 'image content').appendTo(modalContainer);
+            let innerImgContainer = $('<div>').attr('class', 'ui medium image').appendTo(recipeImgContainer);
+            $('<img>').attr('src', recipe.recipePic).appendTo(innerImgContainer);
+            let mainDescriptionDiv = $('<div>').attr('class', 'description').appendTo(recipeImgContainer);
+            $('<div>').attr('class', 'ui header').text('Ingredients').appendTo(mainDescriptionDiv);
+            let ingredientListContainer = $('<div>').attr('class', 'ui celled unordered list').appendTo(mainDescriptionDiv);
+            for(x of recipe.recipeIngredients){
+                $('<div>').attr('class','item').text(x).appendTo(ingredientListContainer);
+            }
+            $('<div>').attr('class', 'ui header').text('DIrections').appendTo(mainDescriptionDiv);
+            let directionsListContainer = $('<div>').attr('class', 'ui celled unordered list').appendTo(mainDescriptionDiv);
+            for(x of recipe.recipeDirections){
+                $('<div>').attr('class','item').text(x).appendTo(directionsListContainer);
+            }
+            let actionsDiv = $('<div>').attr('class', 'actions').appendTo(modalContainer);
+            let recipeCloseButton = $('<div>').attr('class', 'ui positive right labeled icon button').text('All Done').appendTo(actionsDiv);
+            recipeCloseButton.click(function(){
+                $('.ui.modal').empty();
+                $('.ui.modal').modal('hide dimmer');
+            });
+            $('.ui.modal').modal('show');
+        }
 
         $('.star').click(function(){
             console.log('The star has been clicked.')
@@ -204,7 +231,7 @@ $('#drinkButton').click(function(){
 
 function drinkPage(){
     //1. Empty the contents of the main container
-    $('#mainContainer').empty();
+    $('#mainContainer#mainContainer').empty();
 
     //2. Build drink search page
     var drinkSearchDiv = $('<div>').attr('class', 'ui raised very padded text container segment');
